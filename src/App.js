@@ -22,14 +22,10 @@ class App extends Component {
 
   handleChange(event) {
     event.preventDefault();
-    const value = event.target.value;
-    console.log()
-    // const name = event.target.name;
-    
+    const value = event.target.value;    
     this.setState({
       addedBeer: value
     });
-    // this.isbeingfilled();
   }
 
   addBeerClick(event) {
@@ -84,19 +80,19 @@ class App extends Component {
   // likeClick = (beerName) => {
   //   console.log("you clicked me!")
   //   console.log(beerName)
-  //   let beerNames = 
-  //     this.state.allBeers
-  //   let newState = beerNames.filter(beer => {
+  // //   let beerNames = 
+  // //     this.state.allBeers
+  // //   let newState = beerNames.filter(beer => {
        
-  //       //if true current gets returned to new array
-  //       //if false it gets taken out
-  //       return !(beerName === beer.name)
-  //     })
+  // //       //if true current gets returned to new array
+  // //       //if false it gets taken out
+  // //       return !(beerName === beer.name)
+  // //     })
     
-  //   this.setState({
-  //     modification: beerName,
-  //     data: newState
-  //   })
+  // //   this.setState({
+  // //     modification: beerName,
+  // //     data: newState
+  // //   })
   // }
 
   componentDidMount() {
