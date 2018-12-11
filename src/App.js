@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Header from "./components/Header/index";
 import BeerCards from "./components/BeerCards/index";
-
+import '../src/App.css';
 const beerURL = "https://beer.fluentcloud.com/v1/beer";
 const proxyURL = "https://cors-anywhere.herokuapp.com/";
 
@@ -110,7 +110,7 @@ class App extends Component {
     return (
       <div className="container">
         <Header />
-        <main className="row justify-content-start">
+        <main className="container row justify-content-center">
           <div className="card col-xs-12 col-sm-6 col-md-4 border border-primary">
             <h2 className="card-header text-warning font-weight-bold">
               Beer Cooler
@@ -156,5 +156,4 @@ class App extends Component {
 
 export default App;
 
-// <section className="row justify-content-start">
-// </section>
+

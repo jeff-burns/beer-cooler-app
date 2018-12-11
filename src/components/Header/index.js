@@ -3,7 +3,7 @@ import React from 'react';
 const Header = () => {
     return (
         <header>
-          <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+          <nav className="navbar navbar-expand-lg navbar-dark bg-primary justify-content-center">
             <h1 className="navbar-brand">Beer Cooler App</h1>
           </nav>
         </header>
