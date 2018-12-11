@@ -10,6 +10,7 @@ const Main = props => {
         likeClick={props.likeClick}
     />;
   });
+  console.log(props)
   return (
     <main className="container">
       <section className=" column">
@@ -27,7 +28,7 @@ const Main = props => {
             <div className="form-group">
               <label
                 className="col-form-label col-form-label-sm"
-                for="inputSmall"
+                htmlFor="inputSmall"
               >
                 Add A Beer!
               </label>
@@ -36,8 +37,10 @@ const Main = props => {
                 type="text"
                 placeholder="Budweiser"
                 id="inputSmall"
+                value={props.value}
+                onChange={this.props.handleChange.bind(null, props.value)}
               />
-              <button type="button" class="btn btn-primary btn-sm">Add Beer!</button>                
+                            
             </div>
           </div>
         </div>
@@ -47,6 +50,11 @@ const Main = props => {
 };
 
 export default Main;
+
+
+
+
+
 
 // <main className="container">
 //           <section className="row">

@@ -4,7 +4,7 @@ const BeerCards = props => {
   return (
       <li className="list-group-item" key={props.id}>
         <h5 className="card-title">{props.name}</h5>
-        <button type="button" class="btn btn-primary btn-sm" >Like This Beer : {props.likes}</button>                
+        <button type="button" className="btn btn-primary btn-sm" >Like This Beer : {props.likes}</button>                
 
       </li>
   );
