@@ -9,3 +9,13 @@
 
 ### Technologies
 * React.js, HTML5, CSS3, JavaScript, Node.js, Bootswatch, Bootstrap.
+
+
+
+### To Run 
+
+Clone the repo
+
+#### CLI
+
+npm start
