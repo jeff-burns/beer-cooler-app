@@ -16,6 +16,7 @@ class App extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.addBeerClick = this.addBeerClick.bind(this);
+    this.likeClick = this.likeClick.bind(this);
   }
 
   handleChange(event) {
@@ -24,6 +25,13 @@ class App extends Component {
     this.setState({
       addedBeer: value
     });
+  }
+
+  handleErrors(response) {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    return response;
   }
 
   addBeerClick(event) {
@@ -41,30 +49,19 @@ class App extends Component {
       }),
       body: JSON.stringify(addedBeerPostBody)
     })
-      .then(response => {
-        console.log(response);
-        if (response.ok) {
-          return response.json();
-        } else {
-          const contentType = response.headers.get("content-type");
-          if (contentType.startsWith("application/json")) {
-            return response.json().then(json => {
-              const error = new Error(json.error.message);
-              throw error;
-            });
-          } else {
-            const error = new Error(response.statusText);
-            throw error;
-          }
-        }
-      })
+      .then(this.handleErrors)
       .then(json => {
         console.log(json);
       })
       .catch(error => {
-        console.error("error", error.message);
+        console.error(error);
         // show an error message
       });
+    this.setState(this.state);
+  }
+
+  likeClick() {
+    this.setState(this.state);
   }
 
   componentDidMount() {
@@ -73,7 +70,6 @@ class App extends Component {
         return response.json();
       })
       .then(response => {
-        console.log(response);
         this.setState({ allBeers: response });
       })
       .catch(() =>
@@ -81,19 +77,28 @@ class App extends Component {
           "Can’t access " + beerURL + " response. Blocked by browser?"
         )
       );
-      this.setState({ loading: false })
+    this.setState({ loading: false });
   }
 
   render() {
-    console.log(this.state);
     if (this.state.allBeers.length === 0) {
-      return <div class="progress">
-      <div className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: 300 }}></div>
-    </div>;
+      return (
+        <div className="progress">
+          <div
+            className="progress-bar progress-bar-striped progress-bar-animated"
+            role="progressbar"
+            aria-valuenow="75"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            style={{ width: 300 }}
+          />
+        </div>
+      );
     }
     const beerSections = this.state.allBeers.map(beer => {
       return (
         <BeerCards
+          key={beer.id}
           id={beer.id}
           name={beer.name}
           likes={beer.likes}
@@ -103,46 +108,46 @@ class App extends Component {
     });
 
     return (
-      <div>
+      <div className="container">
         <Header />
-        <main className="container">
-          <section className="row">
-            <div className="card mb-3 col-sm-4">
-              <h2 className="card-header text-warning font-weight-bold">Beer Cooler</h2>
-              <div className="card-body">
-                <h3 className="card-title font-weight-bold">Beers</h3>
-              </div>
-              <ul className="list-group list-group-flush">{beerSections}</ul>
+        <main className="row justify-content-start">
+          <div className="card col-xs-12 col-sm-6 col-md-4 border border-primary">
+            <h2 className="card-header text-warning font-weight-bold">
+              Beer Cooler
+            </h2>
+            <div className="card-body">
+              <h3 className="card-title font-weight-bold">Beers</h3>
             </div>
-            <div className="card mb-3 col-sm-4">
-              <div className="card-body">
-                <div className="form-group">
-                  <label
-                    className="col-form-label col-form-label-sm text-danger"
-                    htmlFor="inputSmall"
-                  >
-                    Add A Beer!
-                  </label>
-                  <input
-                    className="form-control form-control-sm"
-                    type="text"
-                    placeholder="Budweiser"
-                    id="inputSmall addedBeer"
-                    name="addedBeer"
-                    value={this.state.addedBeer}
-                    onChange={this.handleChange}
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-sm"
-                    onClick={this.addBeerClick}
-                  >
-                    Add Beer!
-                  </button>
-                </div>
+            <ul className="list-group list-group-flush">{beerSections}</ul>
+          </div>
+          <div className="card col-xs-12 col-sm-6 col-md-4">
+            <div className="card-body">
+              <div className="form-group">
+                <label
+                  className="col-form-label col-form-label-sm text-danger"
+                  htmlFor="inputSmall"
+                >
+                  Add A Beer!
+                </label>
+                <input
+                  className="form-control form-control-sm"
+                  type="text"
+                  placeholder="Budweiser"
+                  id="inputSmall addedBeer"
+                  name="addedBeer"
+                  value={this.state.addedBeer}
+                  onChange={this.handleChange}
+                />
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  onClick={this.addBeerClick}
+                >
+                  Add Beer!
+                </button>
               </div>
             </div>
-          </section>
+          </div>
         </main>
       </div>
     );
@@ -150,3 +155,6 @@ class App extends Component {
 }
 
 export default App;
+
+// <section className="row justify-content-start">
+// </section>

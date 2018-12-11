@@ -20,7 +20,6 @@ class BeerCards extends Component {
       id: this.state.selectedBeerId,
       likes: newLikes
     };
-    console.log(currentLikes, newLikes, addingLikePutBody);
 
     fetch(
       proxyURL +
@@ -33,20 +32,16 @@ class BeerCards extends Component {
         body: JSON.stringify(addingLikePutBody)
       }
     )
-      .then(response => {
-        console.log(response);
-        return response.json();
-      })
+      .then(this.props.handleErrors)
       .then(json => {
         console.log(json);
       })
       .catch(error => {
-        console.error("error", error.message);
+        console.error(error);
         // show an error message
       });
   }
   render() {
-    console.log(this.state);
     return (
       <li className="list-group-item" key={this.props.id}>
         <h5 className="card-title text-info">{this.props.name}</h5>
