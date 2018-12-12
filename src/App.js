@@ -19,6 +19,23 @@ class App extends Component {
     this.likeClick = this.likeClick.bind(this);
   }
 
+  fetchGet() {
+    fetch(proxyURL + beerURL)
+      .then(response => {
+        return response.json();
+      })
+      .then(response => {
+        this.setState({ allBeers: response });
+      })
+      .catch(() =>
+        console.log(
+          "Can’t access " + beerURL + " response. Blocked by browser?"
+        )
+      );
+    this.setState({ loading: false });
+  }
+
+
   handleChange(event) {
     event.preventDefault();
     const value = event.target.value;
@@ -52,12 +69,14 @@ class App extends Component {
       .then(this.handleErrors)
       .then(json => {
         console.log(json);
+        // this.setState({ allBeers: this.state.allBeers });
+
       })
       .catch(error => {
         console.error(error);
         // show an error message
       });
-    this.setState(this.state);
+      this.fetchGet()
   }
 
   likeClick() {
@@ -132,7 +151,7 @@ class App extends Component {
                 <input
                   className="form-control form-control-sm"
                   type="text"
-                  placeholder="Budweiser"
+                  placeholder="Ex: Budweiser"
                   id="inputSmall addedBeer"
                   name="addedBeer"
                   value={this.state.addedBeer}

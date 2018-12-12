@@ -35,6 +35,7 @@ class BeerCards extends Component {
       .then(this.props.handleErrors)
       .then(json => {
         console.log(json);
+        
       })
       .catch(error => {
         console.error(error);
