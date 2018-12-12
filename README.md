@@ -14,10 +14,7 @@
 
 ### To Run 
 
-create-react-app <directory-name>
-git clone the repo into this directory
-npm install
-
-#### CLI
-
-npm start
+* create-react-app <directory-name>
+* git clone the repo into this directory
+* npm install
+* npm start
