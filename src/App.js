@@ -18,6 +18,13 @@ class App extends Component {
     this.addBeerClick = this.addBeerClick.bind(this);
     this.likeClick = this.likeClick.bind(this);
   }
+  componentWillUpdate() {
+    this.fetchGet()
+  }
+
+  // componentDidUpdate() {
+  //   this.fetchGet()
+  // }
 
   fetchGet() {
     fetch(proxyURL + beerURL)
@@ -25,14 +32,13 @@ class App extends Component {
         return response.json();
       })
       .then(response => {
-        this.setState({ allBeers: response });
+        this.setState({ allBeers: response, loading: false });
       })
       .catch(() =>
         console.log(
           "Can’t access " + beerURL + " response. Blocked by browser?"
         )
       );
-    this.setState({ loading: false });
   }
 
 
@@ -50,6 +56,62 @@ class App extends Component {
     }
     return response;
   }
+
+  likeClick(beerID, event) {
+    console.log("you clicked me!")
+    console.log(beerID, event.target["name"], event.target["value"])
+    const beers = this.state.allBeers;
+    console.log(beers)
+    const currentLikes = parseInt(event.target["value"])
+    const newLikes = currentLikes + 1;
+    let updatedBeers = beers.filter(beer => {
+       
+      //if true current gets returned to new array
+      //if false it gets taken out
+      // const index = beers.indexOf(beer);
+      return !(beer.id === beerID)
+      // if (beer.id === beerID) {
+      //    beers.splice(index, 1)
+        
+      // }
+    })
+    const updatedBeerBody = {
+      "id": beerID, "likes": newLikes, "name": event.target["name"]
+    }
+    console.log(updatedBeers)
+    updatedBeers.push( updatedBeerBody)
+    console.log(updatedBeers)
+
+    this.setState({ allBeers: updatedBeers})
+    // const addingLikePutBody = {
+    //   id: beerID,
+    //   likes: newLikes
+    // };
+
+    fetch(
+      proxyURL +
+        `https://beer.fluentcloud.com/v1/beer/${beerID}`,
+      {
+        method: "PUT",
+        headers: new Headers({
+          "content-type": "application/json"
+        }),
+        body: JSON.stringify(updatedBeerBody)
+      }
+    )
+      .then(this.props.handleErrors)
+      .then(json => {
+        console.log(json);
+        
+      })
+      .catch(error => {
+        console.error(error);
+        // show an error message
+      });
+    //   this.setState({ likeAdded: true })
+  }
+
+
 
   addBeerClick(event) {
     event.preventDefault();
@@ -79,24 +141,14 @@ class App extends Component {
       this.fetchGet()
   }
 
-  likeClick() {
-    this.setState(this.state);
-  }
+  // likeClick() {
+  //   this.setState(this.state);
+  //   this.fetchGet();
+  // }
 
   componentDidMount() {
-    fetch(proxyURL + beerURL)
-      .then(response => {
-        return response.json();
-      })
-      .then(response => {
-        this.setState({ allBeers: response });
-      })
-      .catch(() =>
-        console.log(
-          "Can’t access " + beerURL + " response. Blocked by browser?"
-        )
-      );
-    this.setState({ loading: false });
+    this.fetchGet()
+    
   }
 
   render() {
@@ -114,7 +166,10 @@ class App extends Component {
         </div>
       );
     }
-    const beerSections = this.state.allBeers.map(beer => {
+    const beerState = this.state.allBeers
+    console.log(beerState)
+    const beerSections = 
+      beerState.map(beer => {
       return (
         <BeerCards
           key={beer.id}
@@ -122,10 +177,11 @@ class App extends Component {
           name={beer.name}
           likes={beer.likes}
           likeClick={this.likeClick}
-        />
-      );
-    });
-
+          />
+        );
+      })
+    
+  
     return (
       <div className="container">
         <Header />
@@ -137,7 +193,8 @@ class App extends Component {
             <div className="card-body">
               <h3 className="card-title font-weight-bold">Beers</h3>
             </div>
-            <ul className="list-group list-group-flush">{beerSections}</ul>
+            <ul className="list-group list-group-flush"
+            >{beerSections}</ul>
           </div>
           <div className="card col-xs-12 col-sm-6 col-md-4">
             <div className="card-body">
